@@ -51,10 +51,10 @@ def create_directories(base_data_dir: str) -> tuple:
     """
     interim_data_path = Path(os.path.join(base_data_dir, "interim"))
     processed_data_path = Path(os.path.join(base_data_dir, "processed"))
-    os.makedirs(interim_data_path, exist_ok=True)
+    os.makedirs(processed_data_path, exist_ok=True)
     return processed_data_path, interim_data_path
 
-def load_data(processed_data_path: Path) -> tuple:
+def load_data(interim_data_path: Path) -> tuple:
     """
     Load train and test data from CSV files.
 
@@ -70,8 +70,8 @@ def load_data(processed_data_path: Path) -> tuple:
         pd.errors.ParserError: If there is an error parsing the CSV files.
     """
     try:
-        train_data = pd.read_csv(os.path.join(processed_data_path, 'train_processed.csv'))
-        test_data = pd.read_csv(os.path.join(processed_data_path, 'test_processed.csv'))
+        train_data = pd.read_csv(os.path.join(interim_data_path, 'train_processed.csv'))
+        test_data = pd.read_csv(os.path.join(interim_data_path, 'test_processed.csv'))
         train_data.fillna('', inplace=True)
         test_data.fillna('', inplace=True)
         return train_data, test_data
@@ -137,7 +137,7 @@ def main():
         max_features = load_max_features('params.yaml')
         base_data_dir = os.environ["BASE_DATA_DIR"]
         processed_data_path, interim_data_path = create_directories(base_data_dir)
-        train_data, test_data = load_data(processed_data_path)
+        train_data, test_data = load_data(interim_data_path)
         X_train_bow, y_train, X_test_bow, y_test = apply_bag_of_words(train_data, test_data, max_features)
         save_transformed_data(X_train_bow, y_train, processed_data_path, 'train_bow.csv')
         save_transformed_data(X_test_bow, y_test, processed_data_path, 'test_bow.csv')

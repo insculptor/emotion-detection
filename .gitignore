@@ -93,3 +93,5 @@ target/
 models/
 reports/
 data/
+/metrics.json
+/models
