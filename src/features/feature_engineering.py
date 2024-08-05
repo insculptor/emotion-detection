@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import yaml
 from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
@@ -108,6 +109,29 @@ def apply_bag_of_words(train_data: pd.DataFrame, test_data: pd.DataFrame, max_fe
 
     return X_train_bow, y_train, X_test_bow, y_test
 
+def apply_tfidf(train_data: pd.DataFrame, test_data: pd.DataFrame, max_features: int) -> tuple:
+    """
+    Apply TFIDF Vectorizer to the train and test data.
+
+    Args:
+        train_data (pd.DataFrame): DataFrame containing the train data.
+        test_data (pd.DataFrame): DataFrame containing the test data.
+        max_features (int): Maximum number of features for CountVectorizer.
+
+    Returns:
+        tuple: Transformed train and test data, and their corresponding labels.
+    """
+    X_train = train_data['content'].values
+    y_train = train_data['sentiment'].values
+    X_test = test_data['content'].values
+    y_test = test_data['sentiment'].values
+
+    vectorizer = TfidfVectorizer(max_features=max_features)
+    X_train_bow = vectorizer.fit_transform(X_train)
+    X_test_bow = vectorizer.transform(X_test)
+
+    return X_train_bow, y_train, X_test_bow, y_test
+
 def save_transformed_data(X_bow: np.ndarray, y: np.ndarray, interim_data_path: Path, file_name: str) -> None:
     """
     Save transformed data into a CSV file.
@@ -138,7 +162,7 @@ def main():
         base_data_dir = os.environ["BASE_DATA_DIR"]
         processed_data_path, interim_data_path = create_directories(base_data_dir)
         train_data, test_data = load_data(interim_data_path)
-        X_train_bow, y_train, X_test_bow, y_test = apply_bag_of_words(train_data, test_data, max_features)
+        X_train_bow, y_train, X_test_bow, y_test = apply_tfidf(train_data, test_data, max_features)
         save_transformed_data(X_train_bow, y_train, processed_data_path, 'train_bow.csv')
         save_transformed_data(X_test_bow, y_test, processed_data_path, 'test_bow.csv')
     except Exception as e:
