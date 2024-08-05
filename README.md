@@ -42,13 +42,14 @@ Emotion-Detection/
 ```bash
 git clone https://github.com/yourusername/Emotion-Detection.git
 cd Emotion-Detection
-
+'''
 2. **Create a new conda environment and install dependencies:**
 
 ```bash
 conda create --name emotion_detection python=3.12
 conda activate emotion_detection
 pip install -r scripts/requirements.txt
+'''
 
 3. **Set up environment variables:**
 Create a .env file in the root directory and add the following variables:
@@ -56,11 +57,13 @@ Create a .env file in the root directory and add the following variables:
 ```bash
 BASE_DATA_DIR=./data
 BASE_MODEL_DIR=./models
+'''
 
 4. **Download NLTK resources:**
 
 ```bash
 python -m nltk.downloader wordnet stopwords4
+'''
 
 
 ## Usage
@@ -70,6 +73,7 @@ Run the data preprocessing script to clean and prepare the data:
 
 ```bash
 python scripts/data_preprocessing.py
+'''
 
 
 **Feature Engineering**
@@ -77,15 +81,18 @@ Run the feature engineering script to extract features:
 
 ```bash
 python scripts/feature_engineering.py
+'''
 
 **Model Training**
 Run the model training script to train the XGBoost model:
 
 ```bash
 python scripts/model_training.py
+'''
 
 **Model Evaluation**
 Run the model evaluation script to evaluate the model's performance:
 
 ```bash
 python scripts/model_evaluation.py
+'''
