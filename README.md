@@ -1,57 +1,91 @@
-emotion-detection
-==============================
+# Emotion Detection
 
-MLOPS End-to-End Pipeline showing Emotion Detection on sample data.
+This repository contains an end-to-end machine learning project for emotion detection using XGBoost. The project demonstrates a complete MLOps workflow, including data preprocessing, feature engineering, model training, evaluation, and deployment. It uses DVC for data version control and GitHub Actions for continuous integration and deployment.
 
-Project Organization
-------------
+## Table of Contents
 
-    ├── LICENSE
-    ├── Makefile           <- Makefile with commands like `make data` or `make train`
-    ├── README.md          <- The top-level README for developers using this project.
-    ├── data
-    │   ├── external       <- Data from third party sources.
-    │   ├── interim        <- Intermediate data that has been transformed.
-    │   ├── processed      <- The final, canonical data sets for modeling.
-    │   └── raw            <- The original, immutable data dump.
-    │
-    ├── docs               <- A default Sphinx project; see sphinx-doc.org for details
-    │
-    ├── models             <- Trained and serialized models, model predictions, or model summaries
-    │
-    ├── notebooks          <- Jupyter notebooks. Naming convention is a number (for ordering),
-    │                         the creator's initials, and a short `-` delimited description, e.g.
-    │                         `1.0-jqp-initial-data-exploration`.
-    │
-    ├── references         <- Data dictionaries, manuals, and all other explanatory materials.
-    │
-    ├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
-    │   └── figures        <- Generated graphics and figures to be used in reporting
-    │
-    ├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
-    │                         generated with `pip freeze > requirements.txt`
-    │
-    ├── setup.py           <- makes project pip installable (pip install -e .) so src can be imported
-    ├── src                <- Source code for use in this project.
-    │   ├── __init__.py    <- Makes src a Python module
-    │   │
-    │   ├── data           <- Scripts to download or generate data
-    │   │   └── make_dataset.py
-    │   │
-    │   ├── features       <- Scripts to turn raw data into features for modeling
-    │   │   └── build_features.py
-    │   │
-    │   ├── models         <- Scripts to train models and then use trained models to make
-    │   │   │                 predictions
-    │   │   ├── predict_model.py
-    │   │   └── train_model.py
-    │   │
-    │   └── visualization  <- Scripts to create exploratory and results oriented visualizations
-    │       └── visualize.py
-    │
-    └── tox.ini            <- tox file with settings for running tox; see tox.readthedocs.io
+- [Project Structure](#project-structure)
+- [Installation](#installation)
+- [Usage](#usage)
+- [MLOps Workflow](#mlops-workflow)
+- [License](#license)
+
+## Project Structure
+Emotion-Detection/
+│
+├── data/
+│ ├── raw/
+│ ├── processed/
+│ └── features/
+├── models/
+│ └── model.pkl
+├── scripts/
+│ ├── data_preprocessing.py
+│ ├── feature_engineering.py
+│ ├── model_training.py
+│ ├── model_evaluation.py
+│ └── requirements.txt
+├── .github/
+│ └── workflows/
+│ └── ci.yml
+├── params.yaml
+├── dvc.yaml
+├── dvc.lock
+├── README.md
+├── .gitignore
+└── .env
+
+## Installation
+
+1. **Clone the repository:**
+
+```bash
+git clone https://github.com/yourusername/Emotion-Detection.git
+cd Emotion-Detection
+
+2. **Create a new conda environment and install dependencies:**
+
+```bash
+conda create --name emotion_detection python=3.12
+conda activate emotion_detection
+pip install -r scripts/requirements.txt
+
+3. **Set up environment variables:**
+Create a .env file in the root directory and add the following variables:
+
+```bash
+BASE_DATA_DIR=./data
+BASE_MODEL_DIR=./models
+
+4. **Download NLTK resources:**
+
+```bash
+python -m nltk.downloader wordnet stopwords4
 
 
---------
+## Usage
 
-<p><small>Project based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>. #cookiecutterdatascience</small></p>
+**Data Preprocessing**
+Run the data preprocessing script to clean and prepare the data:
+
+```bash
+python scripts/data_preprocessing.py
+
+
+**Feature Engineering**
+Run the feature engineering script to extract features:
+
+```bash
+python scripts/feature_engineering.py
+
+**Model Training**
+Run the model training script to train the XGBoost model:
+
+```bash
+python scripts/model_training.py
+
+**Model Evaluation**
+Run the model evaluation script to evaluate the model's performance:
+
+```bash
+python scripts/model_evaluation.py
