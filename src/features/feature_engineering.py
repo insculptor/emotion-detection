@@ -49,10 +49,10 @@ def create_directories(base_data_dir: str) -> tuple:
     Returns:
         tuple: Paths for processed data and features directories.
     """
+    interim_data_path = Path(os.path.join(base_data_dir, "interim"))
     processed_data_path = Path(os.path.join(base_data_dir, "processed"))
-    features_path = Path(os.path.join(base_data_dir, "features"))
-    os.makedirs(features_path, exist_ok=True)
-    return processed_data_path, features_path
+    os.makedirs(interim_data_path, exist_ok=True)
+    return processed_data_path, interim_data_path
 
 def load_data(processed_data_path: Path) -> tuple:
     """
@@ -108,14 +108,14 @@ def apply_bag_of_words(train_data: pd.DataFrame, test_data: pd.DataFrame, max_fe
 
     return X_train_bow, y_train, X_test_bow, y_test
 
-def save_transformed_data(X_bow: np.ndarray, y: np.ndarray, features_path: Path, file_name: str) -> None:
+def save_transformed_data(X_bow: np.ndarray, y: np.ndarray, interim_data_path: Path, file_name: str) -> None:
     """
     Save transformed data into a CSV file.
 
     Args:
         X_bow (np.ndarray): Transformed feature data.
         y (np.ndarray): Labels corresponding to the feature data.
-        features_path (Path): Path to the directory where the CSV file will be saved.
+        interim_data_path (Path): Path to the directory where the CSV file will be saved.
         file_name (str): Name of the CSV file to save.
     
     Raises:
@@ -124,7 +124,7 @@ def save_transformed_data(X_bow: np.ndarray, y: np.ndarray, features_path: Path,
     try:
         df = pd.DataFrame(X_bow.toarray())
         df['label'] = y
-        df.to_csv(os.path.join(features_path, file_name), index=False)
+        df.to_csv(os.path.join(interim_data_path, file_name), index=False)
     except IOError as e:
         print(f"[ERROR]: Error saving CSV file: {e}")
         raise
@@ -136,11 +136,11 @@ def main():
     try:
         max_features = load_max_features('params.yaml')
         base_data_dir = os.environ["BASE_DATA_DIR"]
-        processed_data_path, features_path = create_directories(base_data_dir)
+        processed_data_path, interim_data_path = create_directories(base_data_dir)
         train_data, test_data = load_data(processed_data_path)
         X_train_bow, y_train, X_test_bow, y_test = apply_bag_of_words(train_data, test_data, max_features)
-        save_transformed_data(X_train_bow, y_train, features_path, 'train_bow.csv')
-        save_transformed_data(X_test_bow, y_test, features_path, 'test_bow.csv')
+        save_transformed_data(X_train_bow, y_train, processed_data_path, 'train_bow.csv')
+        save_transformed_data(X_test_bow, y_test, processed_data_path, 'test_bow.csv')
     except Exception as e:
         print(f"[ERROR]: {e}")
 
