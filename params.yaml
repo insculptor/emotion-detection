@@ -3,6 +3,7 @@ data_ingestion:
 
 feature_engineering:
   max_features: 800
+  model_type: "bag_of_words"
 
 model_building:
   n_estimators: 750

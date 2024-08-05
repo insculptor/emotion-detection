@@ -29,7 +29,9 @@ def load_max_features(params_path: str) -> int:
         with open(params_path, 'r') as file:
             params = yaml.safe_load(file)
             max_features = params['feature_engineering']['max_features']
-            return max_features
+            model = params['feature_engineering']['model_type']
+            print(f"[INFO]: Running Model with Following Parameters: max_features: {max_features} | model: {model}")
+            return max_features,model
     except FileNotFoundError:
         print("[ERROR]: Parameters file not found.")
         raise
@@ -158,11 +160,17 @@ def main():
     Main function to load parameters, create directories, load data, apply Bag of Words, and save transformed data.
     """
     try:
-        max_features = load_max_features('params.yaml')
+        max_features, model = load_max_features('params.yaml')
         base_data_dir = os.environ["BASE_DATA_DIR"]
         processed_data_path, interim_data_path = create_directories(base_data_dir)
         train_data, test_data = load_data(interim_data_path)
-        X_train_bow, y_train, X_test_bow, y_test = apply_tfidf(train_data, test_data, max_features)
+        
+        print(f"[INFO]: Applying {model} model...")
+        if model == "tfidf":
+            X_train_bow, y_train, X_test_bow, y_test = apply_tfidf(train_data, test_data, max_features)
+        else:
+            X_train_bow, y_train, X_test_bow, y_test = apply_bag_of_words(train_data, test_data, max_features)
+            
         save_transformed_data(X_train_bow, y_train, processed_data_path, 'train_bow.csv')
         save_transformed_data(X_test_bow, y_test, processed_data_path, 'test_bow.csv')
     except Exception as e:
