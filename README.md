@@ -2,6 +2,8 @@
 
 This repository contains an end-to-end machine learning project for emotion detection using XGBoost. The project demonstrates a complete MLOps workflow, including data preprocessing, feature engineering, model training, evaluation, and deployment. It uses DVC for data version control and GitHub Actions for continuous integration and deployment.
 
+
+
 ## Table of Contents
 
 - [Project Structure](#project-structure)
@@ -97,3 +99,7 @@ Run the model evaluation script to evaluate the model's performance:
 ```bash
 python scripts/model_evaluation.py
 ```
+
+
+## References
+https://www.youtube.com/@campusx-official
